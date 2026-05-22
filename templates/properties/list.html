@@ -1,0 +1,87 @@
+{% extends 'base.html' %}
+{% block title %}Múlkler — Kóshpes Múlk{% endblock %}
+
+{% block content %}
+<div class="page-header">
+  <h1>🏘️ Múlklerdi izlew</h1>
+  <p>Múlklerdi filtrlew</p>
+</div>
+
+<div class="section">
+  <!-- FILTERS -->
+  <div class="filters-bar">
+    <form method="get" action="">
+      <div class="filters-grid">
+        <div class="filter-group">
+          <label>Jarıya túri</label>
+          <select name="listing_type">
+            <option value="" {% if not listing_type %}selected{% endif %}>Barlıǵı</option>
+            <option value="sale" {% if listing_type == 'sale' %}selected{% endif %}>Satıw ushın</option>
+            <option value="rent" {% if listing_type == 'rent' %}selected{% endif %}>Ijara ushın</option>
+          </select>
+        </div>
+        <div class="filter-group">
+          <label>Múlk túri</label>
+          <select name="property_type">
+            <option value="" {% if not property_type %}selected{% endif %}>Barlıq túrleri</option>
+            <option value="apartment" {% if property_type == 'apartment' %}selected{% endif %}>Páter</option>
+            <option value="house" {% if property_type == 'house' %}selected{% endif %}>Úy</option>
+            <option value="commercial" {% if property_type == 'commercial' %}selected{% endif %}>Kommerciyalıq</option>
+            <option value="land" {% if property_type == 'land' %}selected{% endif %}>Jer maydanı</option>
+          </select>
+        </div>
+        <div class="filter-group">
+          <label>Qala</label>
+          <input type="text" name="city" value="{{ city }}" placeholder="Qala atı...">
+        </div>
+        <div class="filter-group">
+          <label>Eń az bahası ($)</label>
+          <input type="number" name="min_price" value="{{ min_price }}" placeholder="0">
+        </div>
+        <div class="filter-group">
+          <label>Eń kóp bahası ($)</label>
+          <input type="number" name="max_price" value="{{ max_price }}" placeholder="999999">
+        </div>
+        <div class="filter-group">
+          <label>Tertipke salıw</label>
+          <select name="sort">
+            <option value="-created_at" {% if sort == '-created_at' %}selected{% endif %}>Jańaları birinshi</option>
+            <option value="price_asc" {% if sort == 'price_asc' %}selected{% endif %}>Baha: Tómeneden joqarıǵa</option>
+            <option value="price_desc" {% if sort == 'price_desc' %}selected{% endif %}>Baha: Joqarıdan tómenga</option>
+          </select>
+        </div>
+        <div class="filter-group" style="display:flex;gap:8px;align-items:flex-end;">
+          <button type="submit" class="btn btn-primary w-full">Filtrlerdi qollaw</button>
+          <a href="{% url 'property_list' %}" class="btn btn-outline" style="flex-shrink:0;">✕</a>
+        </div>
+      </div>
+    </form>
+  </div>
+
+  <!-- RESULTS -->
+  <div style="margin-bottom:16px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;">
+    <p style="color:var(--text3);font-size:0.875rem;">
+      <strong style="color:var(--text);">{{ properties|length }}</strong> múlk tabıldı
+      {% if q %} — "<strong>{{ q }}</strong>" ushın{% endif %}
+    </p>
+    {% if q or listing_type or property_type or city %}
+    <a href="{% url 'property_list' %}" class="btn btn-outline btn-sm">Tazalaw</a>
+    {% endif %}
+  </div>
+
+  {% if properties %}
+  <div class="properties-grid">
+    {% for prop in properties %}
+    {% include 'properties/card.html' with prop=prop %}
+    {% endfor %}
+  </div>
+  {% else %}
+  <div class="empty-state">
+    <div class="empty-icon">🔍</div>
+    <h3>Múlkler tabılmadı</h3>
+    <p>Boshqa filtrlerdi sinap kóriń</p>
+    <a href="{% url 'property_list' %}" class="btn btn-primary mt-4">Barlıǵın kóriw</a>
+  </div>
+  {% endif %}
+</div>
+{% endblock %}

@@ -1,0 +1,142 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Kóshpes Múlk — Bas bet{% endblock %}
+
+{% block content %}
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-particles"></div>
+  <div class="hero-content">
+    <div class="hero-tag">✨ Qaraqalpaqstan #1 Múlk Platforması</div>
+    <h1>Óz <span>ármánıńızdaǵı</span><br>úydi tabıń</h1>
+    <p>Satıw hám ijara ushın pútkil mámleket boyınsha múlklerdi izlew</p>
+
+    <form class="hero-search" action="{% url 'property_list' %}" method="get">
+      <div class="hero-search-row">
+        <select name="listing_type">
+          <option value="">Barlıq túrleri</option>
+          <option value="sale">Satıw ushın</option>
+          <option value="rent">Ijara ushın</option>
+        </select>
+        <select name="property_type">
+          <option value="">Múlk túri</option>
+          <option value="apartment">Páter</option>
+          <option value="house">Úy</option>
+          <option value="commercial">Kommerciyalıq</option>
+          <option value="land">Jer maydanı</option>
+        </select>
+        <input type="text" name="q" placeholder="Qala, mánzil, taqırıp...">
+        <button type="submit" class="btn btn-primary">🔍 Izlew</button>
+      </div>
+    </form>
+  </div>
+</section>
+
+<!-- STATS -->
+<div class="stats">
+  <div class="stat-item">
+    <span class="stat-number" data-counter="{{ total_props }}">0</span>
+    <span class="stat-label">Jarıyalanǵan múlkler</span>
+  </div>
+  <div class="stat-item">
+    <span class="stat-number" data-counter="450">0</span>
+    <span class="stat-label">Rıza bolǵan klientler</span>
+  </div>
+  <div class="stat-item">
+    <span class="stat-number" data-counter="{{ cities_count }}">0</span>
+    <span class="stat-label">Qamtilǵan qalalar</span>
+  </div>
+  <div class="stat-item">
+    <span class="stat-number" data-counter="5">0</span>
+    <span class="stat-label">Tájiriybe jılları</span>
+  </div>
+</div>
+
+<!-- CATEGORIES -->
+<div class="section">
+  <div class="section-header">
+    <div>
+      <h2 class="section-title">Múlk <span>túrleri</span></h2>
+      <p class="section-subtitle">Kerekli kategoriyani tańlań</p>
+    </div>
+  </div>
+  <div class="categories-grid">
+    <a href="{% url 'property_list' %}?property_type=apartment" class="category-card">
+      <span class="category-icon">🏢</span>
+      <span class="category-name">Páter</span>
+      <span class="category-count">Apartment</span>
+    </a>
+    <a href="{% url 'property_list' %}?property_type=house" class="category-card">
+      <span class="category-icon">🏡</span>
+      <span class="category-name">Úy</span>
+      <span class="category-count">Jeke úy</span>
+    </a>
+    <a href="{% url 'property_list' %}?property_type=commercial" class="category-card">
+      <span class="category-icon">🏪</span>
+      <span class="category-name">Kommerciyalıq</span>
+      <span class="category-count">Dúkan, ofis</span>
+    </a>
+    <a href="{% url 'property_list' %}?property_type=land" class="category-card">
+      <span class="category-icon">🌿</span>
+      <span class="category-name">Jer maydanı</span>
+      <span class="category-count">Qurlıs jeri</span>
+    </a>
+  </div>
+</div>
+
+<!-- FEATURED -->
+{% if featured %}
+<div class="section" style="padding-top:0;">
+  <div class="section-header">
+    <div>
+      <h2 class="section-title">Tańdawlı <span>múlkler</span></h2>
+      <p class="section-subtitle">Eń jaqsı jarıyalar</p>
+    </div>
+    <a href="{% url 'property_list' %}" class="btn btn-outline">Barlıǵın kóriw →</a>
+  </div>
+  <div class="properties-grid">
+    {% for prop in featured %}
+    {% include 'properties/card.html' with prop=prop %}
+    {% endfor %}
+  </div>
+</div>
+{% endif %}
+
+<!-- RECENT -->
+{% if recent %}
+<div class="section" style="padding-top:0;">
+  <div class="section-header">
+    <div>
+      <h2 class="section-title">Jańa <span>jarıyalar</span></h2>
+      <p class="section-subtitle">Eń jańa qosılǵan múlkler</p>
+    </div>
+    <a href="{% url 'property_list' %}" class="btn btn-outline">Barlıǵın kóriw →</a>
+  </div>
+  <div class="properties-grid">
+    {% for prop in recent %}
+    {% include 'properties/card.html' with prop=prop %}
+    {% endfor %}
+  </div>
+</div>
+{% endif %}
+
+<!-- CTA -->
+<div class="section" style="padding-top:0;">
+  <div style="background: linear-gradient(135deg, var(--primary), var(--primary-dark)); border-radius: 24px; padding: 48px 40px; text-align: center; color: white; position: relative; overflow: hidden;">
+    <div style="position:absolute;inset:0;background:url(\"data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23ffffff' fill-opacity='0.05'%3E%3Cpath d='M20 20c0-11-9-20-20-20v40c11 0 20-9 20-20z'/%3E%3C/g%3E%3C/svg%3E\");"></div>
+    <div style="position:relative;z-index:1;">
+      <h2 style="font-family:'Syne',sans-serif;font-size:2rem;font-weight:800;margin-bottom:12px;">Múlkıńızdi satıń yaki ijaraga beriń</h2>
+      <p style="opacity:0.85;margin-bottom:28px;font-size:1rem;">Mıńlaǵan xarıdarlarnı jarıyanızdı tez kóretuǵın platformamızǵa qosılıń</p>
+      <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;">
+        {% if user.is_authenticated %}
+        <a href="{% url 'property_create' %}" class="btn" style="background:white;color:var(--primary);font-weight:600;">+ Jarıya beriw</a>
+        {% else %}
+        <a href="{% url 'register' %}" class="btn" style="background:white;color:var(--primary);font-weight:600;">Bóginnen ótiw</a>
+        {% endif %}
+        <a href="{% url 'ai_assistant' %}" class="btn btn-outline" style="border-color:rgba(255,255,255,0.4);color:white;">🤖 AI Járdemshi</a>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

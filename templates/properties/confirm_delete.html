@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+{% block title %}Óshiriwdi tasdıqlaw{% endblock %}
+
+{% block content %}
+<div class="section flex-center" style="min-height:60vh;">
+  <div class="form-card" style="text-align:center;">
+    <div style="font-size:3rem;margin-bottom:16px;">🗑️</div>
+    <h2 class="form-title">Óshiriwdi tasdıqlaw</h2>
+    <p style="color:var(--text2);margin-bottom:24px;">
+      "<strong>{{ prop.title }}</strong>" jarıyanı óshiriwge anıq isenesiz be?
+    </p>
+    <form method="post">
+      {% csrf_token %}
+      <div style="display:flex;gap:10px;justify-content:center;">
+        <button type="submit" class="btn btn-danger">🗑 Hawa, óshiriw</button>
+        <a href="{% url 'property_detail' prop.pk %}" class="btn btn-outline">Bıykarlaw</a>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}

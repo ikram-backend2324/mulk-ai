@@ -1,0 +1,48 @@
+{% load static %}
+<a href="{% url 'property_detail' prop.pk %}" class="property-card">
+  <div class="card-image">
+    {% with img=prop.get_main_image %}
+    {% if img %}
+    <img src="{{ img }}" alt="{{ prop.title }}" loading="lazy">
+    {% else %}
+    <div class="card-no-image">
+      {% if prop.property_type == 'apartment' %}🏢
+      {% elif prop.property_type == 'house' %}🏡
+      {% elif prop.property_type == 'commercial' %}🏪
+      {% else %}🌿{% endif %}
+    </div>
+    {% endif %}
+    {% endwith %}
+    <div class="card-badges">
+      {% if prop.listing_type == 'sale' %}
+      <span class="badge badge-sale">Satıw ushın</span>
+      {% else %}
+      <span class="badge badge-rent">Ijara ushın</span>
+      {% endif %}
+      {% if prop.is_featured %}<span class="badge badge-featured">⭐ Tańdawlı</span>{% endif %}
+    </div>
+  </div>
+  <div class="card-body">
+    <div class="card-price">
+      ${{ prop.price|floatformat:0 }}
+      {% if prop.listing_type == 'rent' %}<span>/ay</span>{% endif %}
+    </div>
+    <div class="card-title">{{ prop.title }}</div>
+    <div class="card-location">📍 {{ prop.city }}{% if prop.address %}, {{ prop.address|truncatechars:30 }}{% endif %}</div>
+    {% if prop.property_type != 'land' %}
+    <div class="card-meta">
+      {% if prop.rooms %}
+      <div class="card-meta-item">🛏 <strong>{{ prop.rooms }}</strong></div>
+      {% endif %}
+      {% if prop.bathrooms %}
+      <div class="card-meta-item">🚿 <strong>{{ prop.bathrooms }}</strong></div>
+      {% endif %}
+      <div class="card-meta-item">📐 <strong>{{ prop.area }}m²</strong></div>
+    </div>
+    {% else %}
+    <div class="card-meta">
+      <div class="card-meta-item">📐 Maydanı: <strong>{{ prop.area }}m²</strong></div>
+    </div>
+    {% endif %}
+  </div>
+</a>

@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="kaa" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}Kóshpes Múlk{% endblock %}</title>
+  {% load static %}
+  <link rel="stylesheet" href="{% static 'css/main.css' %}">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🏠</text></svg>">
+  <script>
+    // Apply theme before render to avoid flash
+    (function(){
+      const t = localStorage.getItem('koshpes-theme') || 'light';
+      document.documentElement.setAttribute('data-theme', t);
+    })();
+  </script>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar">
+  <a href="{% url 'home' %}" class="navbar-brand">
+    <div class="logo-icon">🏠</div>
+    <span>Kóshpes</span>&nbsp;Múlk
+  </a>
+
+  <ul class="nav-links">
+    <li><a href="{% url 'home' %}" {% if request.resolver_match.url_name == 'home' %}class="active"{% endif %}>Bas bet</a></li>
+    <li><a href="{% url 'property_list' %}?listing_type=sale">Satıp alıw</a></li>
+    <li><a href="{% url 'property_list' %}?listing_type=rent">Ijarağa alıw</a></li>
+    <li><a href="{% url 'ai_assistant' %}" {% if request.resolver_match.url_name == 'ai_assistant' %}class="active"{% endif %}>AI Járdemshi</a></li>
+    {% if user.is_authenticated %}
+    <li><a href="{% url 'property_create' %}">Jarıya beriw</a></li>
+    <li><a href="{% url 'my_listings' %}">Mening jarıyalarım</a></li>
+    {% endif %}
+  </ul>
+
+  <div class="nav-actions">
+    <button class="theme-toggle" id="themeToggle" aria-label="Theme toggle" title="Tema"></button>
+    {% if user.is_authenticated %}
+      <a href="{% url 'profile' %}" class="btn btn-outline btn-sm">👤 {{ user.first_name|default:user.username }}</a>
+      <form method="post" action="{% url 'logout' %}" style="display:inline;">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-sm" style="background:transparent;border:1.5px solid var(--border);color:var(--text3);">Shıǵıw</button>
+      </form>
+    {% else %}
+      <a href="{% url 'login' %}" class="btn btn-outline btn-sm">Kirisiw</a>
+      <a href="{% url 'register' %}" class="btn btn-primary btn-sm">Dizimnen ótiw</a>
+    {% endif %}
+    <button class="hamburger" id="hamburger" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+
+<!-- MOBILE NAV -->
+<div class="mobile-nav" id="mobileNav">
+  <button id="mobileClose" style="position:absolute;top:16px;right:20px;background:none;border:none;font-size:1.5rem;cursor:pointer;color:var(--text);">✕</button>
+  <a href="{% url 'home' %}">Bas bet</a>
+  <a href="{% url 'property_list' %}?listing_type=sale">Satıp alıw</a>
+  <a href="{% url 'property_list' %}?listing_type=rent">Ijarağa alıw</a>
+  <a href="{% url 'ai_assistant' %}">AI Járdemshi</a>
+  {% if user.is_authenticated %}
+  <a href="{% url 'property_create' %}">Jarıya beriw</a>
+  <a href="{% url 'my_listings' %}">Mening jarıyalarım</a>
+  <a href="{% url 'profile' %}">Mening profilim</a>
+  {% else %}
+  <a href="{% url 'login' %}">Kirisiw</a>
+  <a href="{% url 'register' %}">Dizimnen ótiw</a>
+  {% endif %}
+</div>
+
+<!-- ALERTS -->
+{% if messages %}
+<div class="alert-container">
+  {% for message in messages %}
+  <div class="alert alert-{% if message.tags == 'error' %}error{% elif message.tags == 'success' %}success{% else %}info{% endif %}">
+    {% if message.tags == 'success' %}✅{% elif message.tags == 'error' %}❌{% else %}ℹ️{% endif %}
+    {{ message }}
+  </div>
+  {% endfor %}
+</div>
+{% endif %}
+
+<!-- CONTENT -->
+{% block content %}{% endblock %}
+
+<!-- DELETE MODAL -->
+<div class="modal-overlay hidden" id="deleteModal">
+  <div class="modal">
+    <h3 style="font-family:'Syne',sans-serif;font-size:1.3rem;font-weight:800;margin-bottom:12px;">🗑️ Óshiriwdi tasdıqlaw</h3>
+    <p style="color:var(--text2);margin-bottom:24px;">Bul jarıyanı óshiriwge anıq isenesiz be?</p>
+    <form method="post" id="deleteForm">
+      {% csrf_token %}
+      <div style="display:flex;gap:10px;">
+        <button type="submit" class="btn btn-danger" id="deleteConfirmBtn">Hawa, óshiriw</button>
+        <button type="button" class="btn btn-outline" id="deleteCancelBtn">Bıykarlaw</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <div class="footer-logo">
+        <div class="logo-icon" style="color:white;">🏠</div>
+        Kóshpes Múlk
+      </div>
+      <p class="footer-desc">Qaraqalpaqstandaǵı ishénimli kóshpes múlk platforması. Satıw, satıp alıw hám ijara ushın.</p>
+    </div>
+    <div class="footer-col">
+      <h4>Tez siltemeler</h4>
+      <ul>
+        <li><a href="{% url 'home' %}">Bas bet</a></li>
+        <li><a href="{% url 'property_list' %}?listing_type=sale">Satıw ushın</a></li>
+        <li><a href="{% url 'property_list' %}?listing_type=rent">Ijara ushın</a></li>
+        <li><a href="{% url 'ai_assistant' %}">AI Járdemshi</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Esap</h4>
+      <ul>
+        {% if user.is_authenticated %}
+        <li><a href="{% url 'profile' %}">Mening profilim</a></li>
+        <li><a href="{% url 'my_listings' %}">Mening jarıyalarım</a></li>
+        <li><a href="{% url 'property_create' %}">Jarıya beriw</a></li>
+        {% else %}
+        <li><a href="{% url 'login' %}">Kirisiw</a></li>
+        <li><a href="{% url 'register' %}">Dizimnen ótiw</a></li>
+        {% endif %}
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Biz benen baylanısıń</h4>
+      <ul>
+        <li><a href="#">+998 61 222 3344</a></li>
+        <li><a href="#">info@koshpesmulk.uz</a></li>
+        <li><a href="#">Nókis, Qaraqalpaqstan</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>© 2024 Kóshpes Múlk. Barlıq huqıqlar qorǵalǵan.</span>
+    <span>Kóshpes múlk alıw-satıw hám ijaraga beriw platforması</span>
+  </div>
+</footer>
+
+<script src="{% static 'js/main.js' %}"></script>
+{% block extra_js %}{% endblock %}
+</body>
+</html>

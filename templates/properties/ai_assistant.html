@@ -1,0 +1,67 @@
+{% extends 'base.html' %}
+{% block title %}AI Járdemshi — Kóshpes Múlk{% endblock %}
+
+{% block content %}
+<div class="ai-page">
+  <div class="ai-header">
+    <div class="ai-avatar">🏠</div>
+    <h1 class="ai-title">AI Múlk Járdemshisi</h1>
+    <p class="ai-subtitle">Sálem! Sizge eń jaqsı múlk tabıwda járdem beriwim múmkin. Sorawıńızdı bera beriń!</p>
+  </div>
+
+  <!-- QUICK PROMPTS -->
+  <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px;justify-content:center;">
+    <button class="btn btn-outline btn-sm" onclick="setPrompt('Nókiste 2 bólmeli páter bahasın aytıń')">🏢 Páter bahası</button>
+    <button class="btn btn-outline btn-sm" onclick="setPrompt('Ijara ushın qanday hújjetler kerek?')">📄 Ijara hújjetleri</button>
+    <button class="btn btn-outline btn-sm" onclick="setPrompt('Úy satıp alıwda neni eskergen duris?')">💡 Satıp alıw keńesi</button>
+    <button class="btn btn-outline btn-sm" onclick="setPrompt('Qaraqalpaqstanda en arzan qalalar qaysi?')">📍 Arzan qalalar</button>
+  </div>
+
+  <div class="chat-container">
+    <div class="chat-messages" id="chatMessages">
+      <div class="message ai">
+        <div class="msg-avatar">🏠</div>
+        <div class="msg-bubble">Sálem! Men Kóshpes Múlk AI Járdemshisimen 🏠<br><br>
+        Sizge kóshpes múlk maselesinde járdem bere alaman:<br>
+        • Páter, úy, jer izlew<br>
+        • Baha haqqında maǵlıwmat<br>
+        • Ijara hám satıw kórsetmeleri<br>
+        • Qánıgelik keńesi<br><br>
+        Sorawıńızdı qarakalpaqsha, ózbeksha yaki russha jazıwıńız múmkin!</div>
+      </div>
+    </div>
+
+    <div class="chat-input-area">
+      <form id="chatForm" style="display:contents;">
+        {% csrf_token %}
+        <textarea
+          class="chat-input"
+          id="chatInput"
+          placeholder="Xabarıńızdı jazıń..."
+          rows="1"
+        ></textarea>
+        <button type="submit" class="btn btn-primary" style="height:42px;padding:0 18px;">
+          <span>Jiberiw</span> ➤
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <div style="display:flex;justify-content:center;gap:12px;">
+    <button id="clearChat" class="btn btn-outline btn-sm">🗑 Chatdı tazalaw</button>
+    <a href="{% url 'property_list' %}" class="btn btn-outline btn-sm">🔍 Múlklerdi izlew</a>
+  </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+function setPrompt(text) {
+  const input = document.getElementById('chatInput');
+  input.value = text;
+  input.focus();
+  input.style.height = 'auto';
+  input.style.height = input.scrollHeight + 'px';
+}
+</script>
+{% endblock %}

@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+{% block title %}Kirisiw — Kóshpes Múlk{% endblock %}
+
+{% block content %}
+<div class="section flex-center" style="min-height:calc(100vh - 200px);">
+  <div class="form-card" style="width:100%;">
+    <div style="text-align:center;margin-bottom:28px;">
+      <div style="font-size:2.5rem;margin-bottom:12px;">🔑</div>
+      <h1 class="form-title">Qaytqanınız benen!</h1>
+      <p class="form-subtitle">Hesabıńızǵa kirisiń</p>
+    </div>
+
+    {% if form.errors %}
+    <div class="alert alert-error" style="margin-bottom:16px;">
+      ❌ Paydalanıwshı atı yaki parol nátuwrı.
+    </div>
+    {% endif %}
+
+    <form method="post">
+      {% csrf_token %}
+      <div class="form-group">
+        <label>Paydalanıwshı atı</label>
+        <input type="text" name="username" class="form-input" placeholder="Paydalanıwshı atı" autofocus required>
+      </div>
+      <div class="form-group">
+        <label>Parol</label>
+        <input type="password" name="password" class="form-input" placeholder="Parol" required>
+      </div>
+      <button type="submit" class="btn btn-primary w-full" style="margin-bottom:16px;justify-content:center;">Kirisiw →</button>
+    </form>
+
+    <p style="text-align:center;color:var(--text3);font-size:0.875rem;">
+      Esabıńız joq pa?
+      <a href="{% url 'register' %}" style="color:var(--primary);font-weight:600;">Dizimnen ótiw</a>
+    </p>
+  </div>
+</div>
+{% endblock %}

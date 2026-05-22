@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+{% block title %}Mening profilim — Kóshpes Múlk{% endblock %}
+
+{% block content %}
+<div class="page-header">
+  <h1>👤 Mening profilim</h1>
+  <p>Profil maǵlıwmatlarıńızdı jańalań</p>
+</div>
+
+<div class="section">
+  <div style="display:grid;grid-template-columns:1fr 2fr;gap:28px;max-width:900px;margin:0 auto;align-items:start;">
+
+    <!-- Profile Card -->
+    <div style="background:var(--card-bg);border:1px solid var(--card-border);border-radius:20px;padding:28px;text-align:center;box-shadow:var(--shadow);">
+      <div style="width:80px;height:80px;background:linear-gradient(135deg,var(--primary),var(--accent));border-radius:20px;display:flex;align-items:center;justify-content:center;font-size:2.5rem;margin:0 auto 16px;">
+        👤
+      </div>
+      <h3 style="font-family:'Syne',sans-serif;font-weight:700;margin-bottom:4px;">{{ user.get_full_name|default:user.username }}</h3>
+      <p style="color:var(--text3);font-size:0.85rem;margin-bottom:16px;">@{{ user.username }}</p>
+      <div style="font-size:0.8rem;color:var(--text3);line-height:1.8;">
+        {% if user.email %}<div>📧 {{ user.email }}</div>{% endif %}
+        {% if profile.phone %}<div>📞 {{ profile.phone }}</div>{% endif %}
+        <div>📅 {{ user.date_joined|date:"d.m.Y" }} dan beri</div>
+      </div>
+      <div style="margin-top:16px;padding-top:16px;border-top:1px solid var(--border);">
+        <a href="{% url 'my_listings' %}" class="btn btn-primary btn-sm w-full" style="margin-bottom:8px;">Jarıyalarım</a>
+        <a href="{% url 'my_favorites' %}" class="btn btn-outline btn-sm w-full">Saylandılarım</a>
+      </div>
+    </div>
+
+    <!-- Edit Form -->
+    <div style="background:var(--card-bg);border:1px solid var(--card-border);border-radius:20px;padding:28px;box-shadow:var(--shadow);">
+      <h3 style="font-family:'Syne',sans-serif;font-weight:700;margin-bottom:20px;">Profil maǵlıwmatlarını óńdew</h3>
+      <form method="post">
+        {% csrf_token %}
+        <div class="form-row">
+          <div class="form-group">
+            <label>Atı</label>
+            <input type="text" name="first_name" value="{{ user.first_name }}" class="form-input" placeholder="Atı">
+          </div>
+          <div class="form-group">
+            <label>Familiyası</label>
+            <input type="text" name="last_name" value="{{ user.last_name }}" class="form-input" placeholder="Familiyası">
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Elektron pochta</label>
+          <input type="email" name="email" value="{{ user.email }}" class="form-input" placeholder="email@example.com">
+        </div>
+        <div class="form-group">
+          <label>Telefon nomeri</label>
+          <input type="text" name="phone" value="{{ profile.phone }}" class="form-input" placeholder="+998 XX XXX XX XX">
+        </div>
+        <button type="submit" class="btn btn-primary">✅ Saqlaw</button>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock %}

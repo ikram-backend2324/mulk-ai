@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+{% block title %}Mening jarıyalarım — Kóshpes Múlk{% endblock %}
+
+{% block content %}
+<div class="page-header">
+  <h1>📋 Mening jarıyalarım</h1>
+  <p>Óz múlkleríńizdi basqarıń</p>
+</div>
+
+<div class="section">
+  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:24px;flex-wrap:wrap;gap:12px;">
+    <p style="color:var(--text3);">Jámi: <strong style="color:var(--text);">{{ properties|length }}</strong> jarıya</p>
+    <a href="{% url 'property_create' %}" class="btn btn-primary">+ Jańa jarıya beriw</a>
+  </div>
+
+  {% if properties %}
+  <div class="listings-list">
+    {% for prop in properties %}
+    <div class="listing-row">
+      {% with img=prop.get_main_image %}
+      {% if img %}
+      <img class="listing-thumb" src="{{ img }}" alt="{{ prop.title }}">
+      {% else %}
+      <div class="listing-thumb flex-center" style="background:var(--bg3);font-size:1.5rem;">
+        {% if prop.property_type == 'apartment' %}🏢{% elif prop.property_type == 'house' %}🏡{% else %}🏪{% endif %}
+      </div>
+      {% endif %}
+      {% endwith %}
+
+      <div class="listing-info">
+        <div class="listing-title">{{ prop.title }}</div>
+        <div class="listing-meta">
+          📍 {{ prop.city }} &nbsp;·&nbsp;
+          {% if prop.listing_type == 'sale' %}Satıw ushın{% else %}Ijara ushın{% endif %} &nbsp;·&nbsp;
+          {{ prop.area }}m² &nbsp;·&nbsp;
+          {{ prop.created_at|date:"d.m.Y" }}
+        </div>
+      </div>
+
+      <div class="listing-price">${{ prop.price|floatformat:0 }}</div>
+
+      <div class="listing-actions">
+        <a href="{% url 'property_detail' prop.pk %}" class="btn btn-outline btn-sm">👁 Kóriw</a>
+        <a href="{% url 'property_edit' prop.pk %}" class="btn btn-outline btn-sm">✏️</a>
+        <button onclick="confirmDelete('{% url 'property_delete' prop.pk %}')" class="btn btn-danger btn-sm">🗑</button>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+  {% else %}
+  <div class="empty-state">
+    <div class="empty-icon">📭</div>
+    <h3>Hesh qanday jarıya joq</h3>
+    <p>Birinshi jarıyanızdı qosıń</p>
+    <a href="{% url 'property_create' %}" class="btn btn-primary mt-4">+ Jarıya beriw</a>
+  </div>
+  {% endif %}
+</div>
+{% endblock %}

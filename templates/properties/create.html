@@ -1,0 +1,130 @@
+{% extends 'base.html' %}
+{% block title %}{% if prop %}Jarıyanı óńdew{% else %}Jarıya beriw{% endif %} — Kóshpes Múlk{% endblock %}
+
+{% block content %}
+<div class="page-header">
+  <h1>{% if prop %}✏️ Jarıyanı óńdew{% else %}🏠 Múlkıńizdi jarıyalap berıń{% endif %}</h1>
+  <p>Barıq maǵlıwmatlardı tolıq tolı kiritiń</p>
+</div>
+
+<div class="section">
+  <div style="max-width:720px;margin:0 auto;">
+    <form method="post" enctype="multipart/form-data">
+      {% csrf_token %}
+
+      <div style="background:var(--card-bg);border:1px solid var(--card-border);border-radius:20px;padding:28px;box-shadow:var(--shadow);margin-bottom:20px;">
+        <h3 style="font-family:'Syne',sans-serif;font-weight:700;margin-bottom:20px;font-size:1rem;text-transform:uppercase;letter-spacing:0.5px;color:var(--primary);">📝 Tiykarǵı maǵlıwmatlar</h3>
+
+        <div class="form-group">
+          <label>Taqırıp</label>
+          {{ form.title }}
+          {% if form.title.errors %}<div class="form-error">{{ form.title.errors }}</div>{% endif %}
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>Jarıya túri</label>
+            {{ form.listing_type }}
+          </div>
+          <div class="form-group">
+            <label>Múlk túri</label>
+            {{ form.property_type }}
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Sıypatlaması</label>
+          {{ form.description }}
+        </div>
+      </div>
+
+      <div style="background:var(--card-bg);border:1px solid var(--card-border);border-radius:20px;padding:28px;box-shadow:var(--shadow);margin-bottom:20px;">
+        <h3 style="font-family:'Syne',sans-serif;font-weight:700;margin-bottom:20px;font-size:1rem;text-transform:uppercase;letter-spacing:0.5px;color:var(--primary);">💰 Baha & Jaylasıw</h3>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>Baha (USD)</label>
+            {{ form.price }}
+          </div>
+          <div class="form-group">
+            <label>Qala</label>
+            {{ form.city }}
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Mánzili</label>
+          {{ form.address }}
+        </div>
+      </div>
+
+      <div style="background:var(--card-bg);border:1px solid var(--card-border);border-radius:20px;padding:28px;box-shadow:var(--shadow);margin-bottom:20px;">
+        <h3 style="font-family:'Syne',sans-serif;font-weight:700;margin-bottom:20px;font-size:1rem;text-transform:uppercase;letter-spacing:0.5px;color:var(--primary);">📐 Xarakteristikalar</h3>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>Maydanı (m²)</label>
+            {{ form.area }}
+          </div>
+          <div class="form-group">
+            <label>Bólmeler sanı</label>
+            {{ form.rooms }}
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>Juwınıw bólmeler</label>
+            {{ form.bathrooms }}
+          </div>
+          <div class="form-group">
+            <label>Jaǵdayı</label>
+            {{ form.condition }}
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>Qabat nomeri</label>
+            {{ form.floor }}
+          </div>
+          <div class="form-group">
+            <label>Jalpı qabatlar</label>
+            {{ form.total_floors }}
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>Qurlǵan jılı</label>
+            {{ form.year_built }}
+          </div>
+          <div class="form-group">
+            <label>Telefon nomeri</label>
+            {{ form.phone }}
+          </div>
+        </div>
+      </div>
+
+      <div style="background:var(--card-bg);border:1px solid var(--card-border);border-radius:20px;padding:28px;box-shadow:var(--shadow);margin-bottom:20px;">
+        <h3 style="font-family:'Syne',sans-serif;font-weight:700;margin-bottom:20px;font-size:1rem;text-transform:uppercase;letter-spacing:0.5px;color:var(--primary);">📸 Súwretler</h3>
+
+        <label for="imageUpload" class="upload-area" style="display:block;cursor:pointer;">
+          <div style="font-size:2.5rem;margin-bottom:8px;">📷</div>
+          <div style="font-weight:600;margin-bottom:4px;">Súwretlerdi júklew</div>
+          <div style="font-size:0.8rem;opacity:0.6;">JPG, PNG, WEBP — maks. 5MB</div>
+        </label>
+        <input type="file" id="imageUpload" name="images" multiple accept="image/*" style="display:none;">
+        <div id="imagePreview" style="display:flex;gap:8px;flex-wrap:wrap;margin-top:12px;"></div>
+      </div>
+
+      <div style="display:flex;gap:12px;flex-wrap:wrap;">
+        <button type="submit" class="btn btn-primary" style="flex:1;min-width:200px;justify-content:center;">
+          {% if prop %}✅ Jańalaw{% else %}🚀 Jarıyanı jiberiw{% endif %}
+        </button>
+        <a href="{% if prop %}{% url 'property_detail' prop.pk %}{% else %}{% url 'home' %}{% endif %}" class="btn btn-outline">Bıykarlaw</a>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}
