@@ -87,4 +87,4 @@ LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/'
 
 OPENROUTER_API_KEY = os.environ.get('OPENROUTER_API_KEY', '')
-OPENROUTER_MODEL = 'qwen/qwen-2.5-7b-instruct:free'
+OPENROUTER_MODEL = 'deepseek/deepseek-v4-flash'
